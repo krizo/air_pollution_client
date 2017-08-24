@@ -14,6 +14,10 @@ class AqicnApiClient:
         url = self.base_url + "feed/" + city + "/"
         return self._request(url)
 
+    def neartest_station(self):
+        url = self.base_url + "feed/here/"
+        return self._request(url)
+
     def search(self, keyword):
         url = self.base_url + "search/"
         params = { "keyword": keyword }
