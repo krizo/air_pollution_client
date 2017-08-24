@@ -13,7 +13,6 @@ STATION_ATTRIBUTES = {
     "time": [ "s", "tz", "v"]
 }
 
-
 def test_token_taken_from_environ():
     assert api_client.token == os.environ['AQICN_TOKEN']
 
@@ -40,10 +39,3 @@ def test_search_existing_keyword():
 def test_nearest_station():
     nearest_station = api_client.neartest_station()
     assert nearest_station.keys() == STATION_ATTRIBUTES.keys()
-    for attribute, params in STATION_ATTRIBUTES.items():
-        if any(params):
-            if isinstance(nearest_station[attribute], list):
-                actual_keys = set(sum([list(key.keys()) for key in nearest_station[attribute] ], []))
-            else:
-                actual_keys = set(nearest_station[attribute])
-            assert actual_keys == set(params)
