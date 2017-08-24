@@ -3,7 +3,7 @@ import requests
 import json
 
 AQICN_TOKEN = os.environ.get('AQICN_TOKEN', None)
-BASE_URL = "https://api.waqi.info/feed/"
+BASE_URL = "https://api.waqi.info/"
 
 class AqicnApiClient:
     def __init__(self, token=AQICN_TOKEN):
@@ -11,8 +11,13 @@ class AqicnApiClient:
         self.base_url = BASE_URL
 
     def get_city(self, city):
-        url = self.base_url + city + "/"
+        url = self.base_url + "feed/" + city + "/"
         return self._request(url)
+
+    def search(self, keyword):
+        url = self.base_url + "search/"
+        params = { "keyword": keyword }
+        return self._request(url, params)
 
     def _request(self, url, params={}):
         params['token'] = self.token
@@ -25,12 +30,11 @@ class AqicnApiClient:
         if content['status'] == 'ok':
             return content['data']
         else:
-            raise ApiException(error_msg, resource_url = response.url, error_msg = content['data'])
+            raise ApiException(content['data'], resource_url = response.url)
 
 
 class ApiException(Exception):
-    def __init__(self, msg, resource_url=None, error_msg=None, status_code=None):
+    def __init__(self, msg, resource_url=None, status_code=None):
         self.msg = msg
         self.resource_url = resource_url
         self.status_code= status_code
-        self.error_msg = error_msg
