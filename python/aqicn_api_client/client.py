@@ -31,10 +31,18 @@ class AqicnApiClient:
     def city_stats(self, city):
         return self.get_city(city)['iaqi']
 
+    def city_measure(self, city, measure):
+        return self.city_stats(city)[measure]['v']
+
+    def station_measure(self, station, measure):
+        return self.station_stats(station)[measure]['v']
+
     def search(self, keyword):
         url = self.base_url + "search/"
         params = { "keyword": keyword }
-        return self._request(url, params)
+        res = self._request(url, params)
+        if not any(res): raise ApiException("Unknown station")
+        return res
 
     def _request(self, url, params={}):
         params['token'] = self.token
