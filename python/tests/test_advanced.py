@@ -16,10 +16,19 @@ api_client = AqicnApiClient()
 
 def test_nearest_station():
     nearest_station = api_client.neartest_station()
-    for attribute, params in STATION_ATTRIBUTES.items():
-        if any(params):
-            if isinstance(nearest_station[attribute], list):
-                actual_keys = set(sum([list(key.keys()) for key in nearest_station[attribute] ], []))
-            else:
-                actual_keys = set(nearest_station[attribute])
-            assert actual_keys == set(params)
+    _check_attributes(nearest_station)
+
+def test_station_stats():
+    station_stats = api_client.station_stats("krasińskiego")
+    _check_attributes(station_stats)
+
+
+def _check_attributes(station):
+        for attribute, params in STATION_ATTRIBUTES.items():
+                actual_keys = None
+                if any(params):
+                    if isinstance(station[attribute], list):
+                        actual_keys = set(sum([list(key.keys()) for key in station[attribute] ], []))
+                    else:
+                        actual_keys = set(station[attribute])
+                    assert all(key in actual_keys for key in set(params))
