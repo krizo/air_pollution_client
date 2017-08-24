@@ -12,7 +12,7 @@ class AqicnApiClient:
         self.token = token
         self.base_url = BASE_URL
 
-    def get_city(self, city):
+    def city_info(self, city):
         url = self.base_url + "feed/" + city + "/"
         return self._request(url)
 
@@ -23,19 +23,25 @@ class AqicnApiClient:
     def station_info(self, station_name):
         info = list_of_dicts_to_dict(self.search(station_name))
         station_url = info['station']['url']
-        return self.get_city(station_url)
+        return self.city_info(station_url)
 
     def station_stats(self, station_name):
         return self.station_info(station_name)['iaqi']
 
     def city_stats(self, city):
-        return self.get_city(city)['iaqi']
+        return self.city_info(city)['iaqi']
 
     def city_measure(self, city, measure):
         return self.city_stats(city)[measure]['v']
 
-    def station_measure(self, station, measure):
-        return self.station_stats(station)[measure]['v']
+    def city_aqi(self, city):
+        return self.city_info(city)['aqi']
+
+    def station_aqi(self, station_name):
+        return self.station_info(station_name)['aqi']
+
+    def station_measure(self, station_name, measure):
+        return self.station_stats(station_name)[measure]['v']
 
     def search(self, keyword):
         url = self.base_url + "search/"

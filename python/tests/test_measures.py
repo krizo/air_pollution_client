@@ -12,6 +12,16 @@ MAIN_METRICS = [
 ]
 api_client = AqicnApiClient()
 
+def test_station_aqi():
+    station_aqi = api_client.station_aqi("krasińskiego")
+    assert type(station_aqi) == int
+    assert station_aqi >= 0
+
+def test_city_aqi():
+    station_aqi = api_client.city_aqi("kraków")
+    assert type(station_aqi) == int
+    assert station_aqi >= 0
+
 def test_station_stats():
     station_stats = api_client.station_stats("krasińskiego")
     _check_metrics(station_stats)

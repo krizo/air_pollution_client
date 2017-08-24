@@ -20,16 +20,16 @@ def test_client_with_invalid_token():
     invalid_token = 'foo'
     invalid_client = AqicnApiClient(token=invalid_token)
     with pytest.raises(ApiException) as exception:
-        res = invalid_client.get_city("shanghai")
+        res = invalid_client.city_info("shanghai")
     assert exception.value.msg == "Invalid key"
 
 def test_existing_city_response_status():
-    res = api_client.get_city("shanghai")
+    res = api_client.city_info("shanghai")
     assert any(res)
 
 def test_not_existing_city_response_status():
     with pytest.raises(ApiException) as exception:
-        res_bad = api_client.get_city("foo")
+        res_bad = api_client.city_info("foo")
     assert exception.value.msg == 'Unknown station'
 
 def test_search_existing_keyword():
