@@ -1,6 +1,7 @@
 import os
 import requests
 import json
+import optparse
 from .helpers import list_of_dicts_to_dict
 
 AQICN_TOKEN = os.environ.get('AQICN_TOKEN', None)
@@ -19,10 +20,16 @@ class AqicnApiClient:
         url = self.base_url + "feed/here/"
         return self._request(url)
 
-    def station_stats(self, station_name):
-        station_info = list_of_dicts_to_dict(self.search(station_name))
-        station_url = station_info['station']['url']
+    def station_info(self, station_name):
+        info = list_of_dicts_to_dict(self.search(station_name))
+        station_url = info['station']['url']
         return self.get_city(station_url)
+
+    def station_stats(self, station_name):
+        return self.station_info(station_name)['iaqi']
+
+    def city_stats(self, city):
+        return self.get_city(city)['iaqi']
 
     def search(self, keyword):
         url = self.base_url + "search/"
